@@ -12,16 +12,16 @@ This repository contains the materials of the workshop on how to use the MEEGsim
 ) to have no conflicts with other packages installed on your system.
 
 2. Activate the environment and install the prerequisites. If you plan to use
-Jupyter Notebook during the tutorial, use `requirements_jupyter.txt`:
+Jupyter Notebook during the tutorial, use the following command:
 
     ```bash
-    pip install -r requirements_jupyter.txt
+    pip install -e .[jupyter]
     ```
 
-    Otherwise, `requirements_minimal.txt` should suffice if you plan to work with plain Python files:
+    Otherwise, the command below should suffice if you plan to work with plain Python files:
 
     ```bash
-    pip install -r requirements_minimal.txt
+    pip install -e .
     ```
 
 3. Depending on your selection in step 2, either launch the Python script

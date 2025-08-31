@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "meegsim_tutorial"
+version = "0.1dev"
+authors = [
+  { name="Nikolai Kapralov", email="kapralov@cbs.mpg.de" },
+  { name="Alina Studenova" },
+]
+description = "Tutorial on how to use MEEGsim for simulating M/EEG data"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "emoji",
+    "mne",
+    "meegsim[plot]==0.0.2"
+]
+
+[project.optional-dependencies]
+jupyter = [
+    "ipykernel"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/meegsim_tutorial"]

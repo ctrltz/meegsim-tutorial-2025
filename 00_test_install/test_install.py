@@ -8,19 +8,21 @@ from meegsim.location import select_random
 from meegsim.simulate import SourceSimulator
 from meegsim.waveform import narrowband_oscillation
 
+from meegsim_tutorial.utils import print_emoji
+
 
 # Head model
-print("Downloading and testing the template head model")
+print_emoji(":down_arrow: Downloading and testing the template head model")
 
 data_path = sample.data_path()
 subjects_dir = data_path / "subjects"
 src = mne.read_source_spaces(subjects_dir / "fsaverage" / "bem" / "fsaverage-ico-5-src.fif")
 
-print("Download complete!")
+print_emoji(":check_mark_button: Download complete!")
 
 
 # Basic functionality
-print("Testing basic functionality of MEEGsim")
+print_emoji(":counterclockwise_arrows_button: Testing basic functionality of MEEGsim")
 
 sim = SourceSimulator(src)
 sim.add_noise_sources(location=select_random, 
@@ -32,11 +34,11 @@ sim.add_point_sources(location=select_random,
 
 sc = sim.simulate(sfreq=250, duration=120)
 
-print("Basic functionality is fine!")
+print_emoji(":check_mark_button: Basic functionality is fine!")
 
 
 # Advanced functionality
-print("Testing advanced functionality of MEEGsim")
+print_emoji(":counterclockwise_arrows_button: Testing advanced functionality of MEEGsim")
 
 sim = SourceSimulator(src)
 sim.add_noise_sources(location=select_random, 
@@ -51,11 +53,11 @@ sim.add_patch_sources(location=select_random,
 
 sc = sim.simulate(sfreq=250, duration=120, random_state=1234)
 
-print("Advanced functionality is fine!")
+print_emoji(":check_mark_button: Advanced functionality is fine!")
 
 
 # Plotting
-print("Testing that plotting works")
+print_emoji(":counterclockwise_arrows_button: Testing that plotting works")
 
 if os.environ.get("BUILD_ENV", None) != "ci":
     brain = sc.plot(subject="fsaverage", 
@@ -68,8 +70,8 @@ if os.environ.get("BUILD_ENV", None) != "ci":
     ax.imshow(screenshot)
     ax.axis('off')
 
-print("Plotting is fine!")
+print_emoji(":check_mark_button: Plotting is fine!")
 
 
 # Happy end!
-print("Everything seems to work!")
+print_emoji(":check_mark_button: Everything seems to work!")
