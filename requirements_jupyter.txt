@@ -1,0 +1,5 @@
+mne
+meegsim[plot]==0.0.2
+
+# Jupyter
+ipykernel
