@@ -5,8 +5,16 @@ name: test-install
 on:
   push:
     branches: [ "master" ]
+    paths:
+      - .github/workflows/test_install.yml
+      - 00_test_install/test_install.py
+      - requirements_minimal.txt
   pull_request:
     branches: [ "master" ]
+    paths:
+      - .github/workflows/test_install.yml
+      - 00_test_install/test_install.py
+      - requirements_minimal.txt
 
 env:
   BUILD_ENV: ci
