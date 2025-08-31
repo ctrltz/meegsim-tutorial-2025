@@ -12,7 +12,7 @@ from meegsim_tutorial.utils import print_emoji
 
 
 # Head model
-print_emoji(":down_arrow: Downloading and testing the template head model")
+print_emoji(":down_arrow:  Downloading and testing the template head model")
 
 data_path = sample.data_path()
 subjects_dir = data_path / "subjects"
@@ -22,7 +22,7 @@ print_emoji(":check_mark_button: Download complete!")
 
 
 # Basic functionality
-print_emoji(":counterclockwise_arrows_button: Testing basic functionality of MEEGsim")
+print_emoji(":gear:  Testing basic functionality of MEEGsim")
 
 sim = SourceSimulator(src)
 sim.add_noise_sources(location=select_random, 
@@ -38,7 +38,7 @@ print_emoji(":check_mark_button: Basic functionality is fine!")
 
 
 # Advanced functionality
-print_emoji(":counterclockwise_arrows_button: Testing advanced functionality of MEEGsim")
+print_emoji(":gear:  Testing advanced functionality of MEEGsim")
 
 sim = SourceSimulator(src)
 sim.add_noise_sources(location=select_random, 
@@ -57,7 +57,7 @@ print_emoji(":check_mark_button: Advanced functionality is fine!")
 
 
 # Plotting
-print_emoji(":counterclockwise_arrows_button: Testing that plotting works")
+print_emoji(":gear:  Testing that plotting works")
 
 if os.environ.get("BUILD_ENV", None) != "ci":
     brain = sc.plot(subject="fsaverage", 
