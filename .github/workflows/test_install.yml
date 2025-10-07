@@ -47,4 +47,4 @@ jobs:
 
       - name: Run the test_install script
         run: |
-          python -X utf8 00_test_install/test_install.py
+          python -X utf8 _solutions/00_test_install/test_install.py

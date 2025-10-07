@@ -27,10 +27,7 @@ def main():
     #
     ###
 
-    download_path = FILL_ME(
-        "Please provide the path to the directory where the data should be downloaded to, "
-        "or use None to proceed with the default (typically, `~/mne_data/`)."
-    )
+    download_path = None
 
     ### 
     # Download the dataset
