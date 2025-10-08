@@ -10,7 +10,7 @@ def fsaverage_brain(subjects_dir, **kwargs):
         surf="inflated",
         hemi="split",
         views=["lat", "med"],
-        size=800,
+        size=600,
     )
     brain_kwargs.update(kwargs)
 
@@ -19,7 +19,7 @@ def fsaverage_brain(subjects_dir, **kwargs):
     return brain
 
 
-def show_source(hemi_idx, vertno, subjects_dir, **kwargs):
+def show_sources(sources, subjects_dir, **kwargs):
     """
     Show one source on the brain surface.
 
@@ -32,8 +32,9 @@ def show_source(hemi_idx, vertno, subjects_dir, **kwargs):
     """
     brain = fsaverage_brain(subjects_dir, **kwargs)
 
-    hemi = "rh" if hemi_idx else "lh"
-    brain.add_foci(vertno, coords_as_verts=True, hemi=hemi, 
-                   color="green", scale_factor=0.75)
+    for hemi_idx, vertno in sources:
+        hemi = "rh" if hemi_idx else "lh"
+        brain.add_foci(vertno, coords_as_verts=True, hemi=hemi, 
+                       color="red", scale_factor=0.75)
     
     return brain
