@@ -1,4 +1,8 @@
+import matplotlib.pyplot as plt
 import mne
+import numpy as np
+
+from scipy.signal import welch
 
 
 def fsaverage_brain(subjects_dir, **kwargs):
@@ -38,3 +42,25 @@ def show_sources(sources, subjects_dir, **kwargs):
                        color="red", scale_factor=0.75)
     
     return brain
+
+
+def show_waveforms(data, times, n_seconds=5):
+    sfreq = 1.0 / (times[1] - times[0])
+    n_samples = int(n_seconds * sfreq)
+
+    n_fft = sfreq
+    n_overlap = n_fft // 2
+    f, spec = welch(data, fs=sfreq, nperseg=n_fft, nfft=n_fft, noverlap=n_overlap)
+
+    fig, (ax1, ax2) = plt.subplots(ncols=2, figsize=(9, 3), layout="constrained",
+                                   gridspec_kw=dict(width_ratios=[3, 1]))
+    ax1.plot(times[:n_samples], data[:, :n_samples].T)
+    ax1.set_xlabel('Time (s)')
+    ax1.set_ylabel('Amplitude (a. u.)')
+
+    ax2.plot(f, 10 * np.log10(spec.T))
+    ax2.set_xscale('log')
+    ax2.set_xlabel('Frequency (Hz)')
+    ax2.set_ylabel('10*log10(PSD)')
+
+    return fig
