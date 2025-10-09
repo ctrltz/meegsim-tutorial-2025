@@ -47,6 +47,8 @@ def show_sources(sources, subjects_dir, **kwargs):
 def show_waveforms(data, times, n_seconds=5):
     sfreq = 1.0 / (times[1] - times[0])
     n_samples = int(n_seconds * sfreq)
+    
+    data = np.atleast_2d(data)
 
     n_fft = sfreq
     n_overlap = n_fft // 2
