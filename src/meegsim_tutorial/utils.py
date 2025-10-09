@@ -1,5 +1,6 @@
 import emoji
 import mne
+import numpy as np
 
 
 def print_emoji(text):
@@ -9,7 +10,7 @@ def print_emoji(text):
 def divider(pre=False, post=False):
     if pre:
         print()
-    print(''.join(['-'] * 40))
+    print("".join(["-"] * 40))
     if post:
         print()
 
@@ -27,3 +28,11 @@ def info_from_montage(montage_name, sfreq=250):
     info = mne.create_info(ch_names=montage.ch_names, sfreq=sfreq, ch_types="eeg")
     info.set_montage(montage)
     return info
+
+
+def vertno_to_index(src, hemi, vertno):
+    assert hemi in ["lh", "rh"]
+    if hemi == "lh":
+        return np.where(src[0]["vertno"] == int(vertno))[0][0]
+    else:
+        return src[0]["nuse"] + np.where(src[1]["vertno"] == int(vertno))[0][0]
