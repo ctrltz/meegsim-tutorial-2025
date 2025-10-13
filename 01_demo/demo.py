@@ -121,7 +121,7 @@ def step1_2_inspect_source_space(src, complete=False):
     vertno = 0
 
     # TIP: add surf="pial" or surf="pial_semi_inflated" to show sulci/gyri
-    show_sources([(hemi_idx, vertno)], subjects_dir)
+    show_sources(src, [(hemi_idx, vertno)], subjects_dir)
 
     # %% [markdown]
     # **EXERCISES**:
@@ -153,7 +153,7 @@ def step1_3_select_random(src, complete=False):
 
     input("Press any key to continue")
 
-    show_sources(select_random(src, n=10), subjects_dir)
+    show_sources(src, select_random(src, n=10), subjects_dir)
 
     input("Press any key to continue")
     print("Step 1.3 is complete, please set complete to True")
@@ -246,7 +246,7 @@ def step2_4_inspect_leadfield(fwd, info, complete=False):
     hemi_idx = 0
     vertno = 0
 
-    show_sources([(hemi_idx, vertno)], subjects_dir)
+    show_sources(src, [(hemi_idx, vertno)], subjects_dir)
     _ = show_leadfield(fwd, info, hemi_idx, vertno)
     plt.show(block=True)
 
