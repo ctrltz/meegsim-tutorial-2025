@@ -25,7 +25,7 @@ def fsaverage_brain(subjects_dir, **kwargs):
     return brain
 
 
-def show_sources(sources, subjects_dir, **kwargs):
+def show_sources(src, sources, subjects_dir, **kwargs):
     """
     Show one source on the brain surface.
 
@@ -40,6 +40,10 @@ def show_sources(sources, subjects_dir, **kwargs):
 
     for hemi_idx, vertno in sources:
         hemi = "rh" if hemi_idx else "lh"
+
+        # NOTE: this call ensures that only vertices in the src can be plotted
+        vertno_to_index(src, hemi, vertno)
+
         brain.add_foci(
             vertno, coords_as_verts=True, hemi=hemi, color="red", scale_factor=0.75
         )

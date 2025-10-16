@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "meegsim_tutorial"
-version = "0.1dev"
+version = "0.2dev"
 authors = [
   { name="Nikolai Kapralov", email="kapralov@cbs.mpg.de" },
   { name="Alina Studenova" },
@@ -24,10 +24,6 @@ dev = [
   "ipywidgets",
   "pre-commit",
   "ruff"
-]
-jupyter = [
-  "ipykernel",
-  "ipywidgets"
 ]
 
 [tool.hatch.build.targets.wheel]
