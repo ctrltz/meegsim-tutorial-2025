@@ -2,13 +2,14 @@ import matplotlib.pyplot as plt
 import mne
 import os
 
-from mne.datasets import sample
+from mne.datasets import fetch_fsaverage
+from pathlib import Path
 
 from meegsim.location import select_random
 from meegsim.simulate import SourceSimulator
 from meegsim.waveform import narrowband_oscillation
 
-from meegsim_tutorial.utils import print_emoji, FILL_ME
+from meegsim_tutorial.utils import print_emoji
 
 
 def main():
@@ -17,20 +18,23 @@ def main():
     # ========================
     #
     # During the workshop, we will use the
-    # [sample dataset](https://mne.tools/stable/generated/mne.datasets.sample.data_path.html)
+    # [fsaverage dataset](https://mne.tools/stable/generated/mne.datasets.fetch_fsaverage.html)
     # provided by MNE-Python. In the cell below, you can set the path to the directory where
-    # the data should be downloaded to use `None` to proceed with the default location
-    # (typically, `~/mne_data/`).
+    # the data should be downloaded to (e.g., `~/mne_data/`).
     #
-    # **NOTE:** the cell below contains a `FILL_ME` placeholder - it is used through all
-    # scripts/notebooks to mark places where you are expected to modify the code.
+    # **NOTE:** the line below contains a `FILL_ME` placeholder - it is used through
+    # all scripts/notebooks to raise an error in places where you are expected to
+    # modify the code. Remove the **whole** `FILL_ME` part, e.g., like shown below:
+    #
+    # download_path = "/path/to/my/directory/of/choice"
     #
     ###
 
-    download_path = FILL_ME(
-        "Please provide the path to the directory where the data should be downloaded to, "
-        "or use None to proceed with the default (typically, `~/mne_data/`)."
-    )
+    download_path = "~/mne_data"
+    # download_path = FILL_ME(
+    #     "Please provide the path to the directory where the data should be downloaded to, "
+    #     "or use None to proceed with the default (typically, `~/mne_data/`)."
+    # )
 
     ###
     # Download the dataset
@@ -39,8 +43,8 @@ def main():
 
     print_emoji(":down_arrow:  Downloading and testing the template head model")
 
-    data_path = sample.data_path(path=download_path)
-    subjects_dir = data_path / "subjects"
+    subjects_dir = Path(download_path) / "MNE-fsaverage-data"
+    fetch_fsaverage(subjects_dir=subjects_dir)
     src = mne.read_source_spaces(
         subjects_dir / "fsaverage" / "bem" / "fsaverage-ico-5-src.fif"
     )
