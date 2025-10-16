@@ -9,7 +9,7 @@ from meegsim.location import select_random
 from meegsim.simulate import SourceSimulator
 from meegsim.waveform import narrowband_oscillation
 
-from meegsim_tutorial.utils import print_emoji
+from meegsim_tutorial.utils import print_emoji, FILL_ME
 
 
 def main():
@@ -30,11 +30,10 @@ def main():
     #
     ###
 
-    download_path = "~/mne_data"
-    # download_path = FILL_ME(
-    #     "Please provide the path to the directory where the data should be downloaded to, "
-    #     "or use None to proceed with the default (typically, `~/mne_data/`)."
-    # )
+    download_path = FILL_ME(
+        "Please provide the path to the directory where the data should be downloaded to, "
+        "or use None to proceed with the default (typically, `~/mne_data/`)."
+    )
 
     ###
     # Download the dataset
