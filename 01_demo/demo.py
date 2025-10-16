@@ -6,10 +6,18 @@ In this tutorial/demo, we will start with the pre-requisites for the simulation
 (source space / forward model), then look into building blocks currently provided
 by MEEGsim and how one can combine them in a simulation.
 
-**NOTE:** this notebook is designed to run in full without you having to change
-anything in code apart from the path to the data (see 0. Configuration below).
+**NOTE:** this script is designed to run in steps, which are contained in the
+functions below. After each step, the program stops. If you're done with exploring
+the output of a certain step, you can go back to the script and skip it by
+setting `complete` to True in the function arguments:
+
+Before: def step1_2_inspect_source_space(src, complete=False): ...
+After:  def step1_2_inspect_source_space(src, complete=True): ...
+
+Some important steps are not skippable. Otherwise, you don't need to change anything
+in code apart from the path to the data (see 0. Configuration below).
 However, you're always welcome to explore and play around with the data.
-The **EXERCISES** part of sections below suggests some things you could try.
+The **EXERCISES** part of the sections below suggests some things you could try.
 """
 
 import matplotlib.pyplot as plt
@@ -26,6 +34,21 @@ from meegsim.simulate import SourceSimulator
 
 from meegsim_tutorial.utils import divider, info_from_montage, FILL_ME
 from meegsim_tutorial.viz import show_sources, show_waveforms, show_leadfield
+
+"""
+To focus more on the functionality of MEEGsim, we provide some helper functions
+which are imported below. Here's a short overview of their purpose:
+
+* `info_from_montage` - creates an `mne.Info` object that contains all EEG channels
+  from the provided `montage`
+* `show_sources` - shows the locations of the provided sources on the `fsaverage`
+  brain surface
+* `show_waveforms` - plots the provided waveforms in time and frequency domain
+* `show_leadfield` - plots the leadfield of the provided sources
+* `FILL_ME` - placeholder for the places where **your** input is expected. It always
+  raises an error with instructions as an error message. Replace the `FILL_ME` call
+  with your code.
+"""
 
 
 """
@@ -433,7 +456,8 @@ def step4_3_obtain_data(sc, complete=False):
 
     # To obtain sensor-space data, we need to provide the forward model (`fwd`)
     # and channel locations (`info`). In addition, we can add a certain level of
-    # measurement noise (`sensor_noise_level`):
+    # measurement noise (`sensor_noise_level`; between 0 and 1, 0 - no noise at all,
+    # 1 - only noise, no brain activity):
 
     raw = sc.to_raw(fwd, info, sensor_noise_level=0.01)
 
@@ -489,11 +513,22 @@ def step4_4_adjust_snr(sim, sfreq=250, duration=60, complete=False):
 
 The current focus of MEEGsim is on connectivity (i.e., synchronization of activity)
 between sources of interest. In this section, we explore the ways to set ground-truth
-coupling in MEEGsim.
+coupling in MEEGsim. In both cases, the user is expected to provide a waveform and
+some function-specific parameters as input, and MEEGsim functions will return another
+waveform that is coupled to the input one in a desired way (i.e., with desired phase
+lag and coupling strength).
 """
 
 
 def step5_1_constant_phase_lag(complete=False):
+    """
+    5.1. Constant phase lag
+
+    The simplest way to obtain synchronization is to copy the input waveform and
+    apply a constant phase lag to it. This approach is implemented in the
+    `ppc_constant_phase_shift`. The amplitude envelope of the output waveform can
+    either be generated randomly (default) or copied from the input.
+    """
     if complete:
         return
 

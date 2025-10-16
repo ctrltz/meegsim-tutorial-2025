@@ -42,7 +42,7 @@ def main():
 
     print_emoji(":down_arrow:  Downloading and testing the template head model")
 
-    subjects_dir = Path(download_path) / "MNE-fsaverage-data"
+    subjects_dir = Path(download_path).expanduser().absolute() / "MNE-fsaverage-data"
     fetch_fsaverage(subjects_dir=subjects_dir)
     src = mne.read_source_spaces(
         subjects_dir / "fsaverage" / "bem" / "fsaverage-ico-5-src.fif"
