@@ -5,44 +5,51 @@ import numpy as np
 from pathlib import Path
 
 from meegsim_tutorial.ext import get_leadfield
-from meegsim_tutorial.utils import FILL_ME, prepare_head_model
+from meegsim_tutorial.utils import prepare_head_model
 from meegsim_tutorial.viz import make_cropped_screenshot
 
 
-download_path = FILL_ME(
-    "Provide the same value for path as the one you used during the installation check."
-)
+from meegsim.simulate import SourceSimulator
+from meegsim.waveform import one_over_f_noise
+
+
+download_path = "~/mne_data"
 subjects_dir = Path(download_path).expanduser().absolute() / "MNE-fsaverage-data"
 
 
 def simulate_point(fwd, hemi_idx, vertno):
-    """
-    This function should return a SourceConfiguration (sc) with one
-    point source at a given location (hemi_idx, vertno) with the name "target".
-    For this example, waveforms, sampling frequency and duration do not
-    matter, feel free to set arbitrary values.
-    """
-    FILL_ME("Implement the simulation of one point source")
+    src = fwd["src"]
+    sim = SourceSimulator(src)
+    sim.add_patch_sources(
+        location=[(hemi_idx, vertno)],
+        waveform=one_over_f_noise,
+        names=["target"],
+    )
+
+    sc = sim.simulate(sfreq=250, duration=10)
+
+    return sc
 
 
 def simulate_patch(fwd, hemi_idx, vertno, patch_extent_mm, subjects_dir):
-    """
-    This function should return a SourceConfiguration (sc) with one
-    patch source of given size (patch_extent_mm) at a given location
-    (hemi_idx, vertno) with the name "target".
-    For this example, waveforms, sampling frequency and duration do not
-    matter, feel free to set arbitrary values.
+    src = fwd["src"]
+    sim = SourceSimulator(src)
+    sim.add_patch_sources(
+        location=[(hemi_idx, vertno)],
+        waveform=one_over_f_noise,
+        extents=patch_extent_mm,
+        subjects_dir=subjects_dir,
+        names=["target"],
+    )
 
-    **NOTE**: find more information on how to add a patch source here:
-    https://meegsim.readthedocs.io/en/latest/generated/meegsim.simulate.SourceSimulator.html#meegsim.simulate.SourceSimulator.add_patch_sources
-    """
-    FILL_ME("Implement the simulation of one patch source")
+    sc = sim.simulate(sfreq=250, duration=10)
+
+    return sc
 
 
 def main():
     fwd, info = prepare_head_model(subjects_dir)
 
-    # Parameters of simulated sources: location and areas
     hemi_idx = 0
     vertno = 76290
     patch_areas_cm2 = [None, 4, 16, 64]

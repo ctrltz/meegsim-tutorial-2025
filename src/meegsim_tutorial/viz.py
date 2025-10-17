@@ -96,3 +96,33 @@ def show_leadfield(fwd, info, hemi_idx, vertno):
 
     fig.colorbar(im, cax=ax_cbar)
     return fig
+
+
+def crop_screenshot(screenshot):
+    """
+    Implementation from MNE tutorials is used:
+    https://mne.tools/stable/auto_tutorials/visualization/10_publication_figure.html
+    """
+    # Crop the white space around the brain plot
+    nonwhite_pix = (screenshot != 255).any(-1)
+    nonwhite_row = nonwhite_pix.any(1)
+    nonwhite_col = nonwhite_pix.any(0)
+    cropped_screenshot = screenshot[nonwhite_row][:, nonwhite_col]
+
+    return cropped_screenshot
+
+
+def make_cropped_screenshot(brain, crop=True, ax=None, close=True):
+    # Make the screenshot
+    screenshot = brain.screenshot()
+    if close:
+        brain.close()
+
+    if crop:
+        screenshot = crop_screenshot(screenshot)
+
+    if ax is not None:
+        ax.imshow(screenshot)
+        ax.axis("off")
+
+    return screenshot
