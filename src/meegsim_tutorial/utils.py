@@ -2,6 +2,8 @@ import emoji
 import mne
 import numpy as np
 
+from pathlib import Path
+
 
 def print_emoji(text):
     print(emoji.emojize(text))
@@ -47,3 +49,28 @@ def vertno_to_index(src, hemi, vertno):
         return vert_idx
 
     return src[0]["nuse"] + vert_idx
+
+
+def prepare_head_model(subjects_dir, spacing="oct5", montage="biosemi64"):
+    src = mne.setup_source_space(
+        subject="fsaverage", spacing=spacing, subjects_dir=subjects_dir, add_dist=False
+    )
+
+    fs_dir = Path(subjects_dir) / "fsaverage"
+    bem = fs_dir / "bem" / "fsaverage-5120-5120-5120-bem-sol.fif"
+    trans = fs_dir / "bem" / "fsaverage-trans.fif"
+
+    info = info_from_montage(montage)
+    fwd = mne.make_forward_solution(
+        info,
+        trans=trans,
+        src=src,
+        bem=bem,
+        eeg=True,
+        mindist=5.0,
+        n_jobs=None,
+        verbose=True,
+    )
+    fwd = mne.convert_forward_solution(fwd, force_fixed=True)
+
+    return fwd, info

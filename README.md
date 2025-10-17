@@ -8,7 +8,8 @@ The following folders contain the materials of the workshop:
 
 * `00_test_install`: small notebook/script for testing that all packages were installed properly when [preparing for the workshop](#preparing-for-the-workshop)
 * `01_demo`: notebook/script that will be discussed during the demo part of the workshop
-* `02_hands_on`: notebooks/scripts with exercises for the hands-on part of the workshop (**WIP**)
+* `02_hands_on`: notebooks/scripts with exercises for the hands-on part of the workshop (**WIP**):
+    * `patch_cancellation`: investigate and visualize how the leadfield of a patch source changes depending on its area
 * `_solutions`: suggested solutions for the `FILL_ME` parts of the scripts (sometimes, just one of the many possible options)
 * `src/meegsim_tutorial`: helper functions that are used in the notebooks/scripts (feel free to check their code if you want to understand them better but this should not be necessary to follow)
 
@@ -28,8 +29,7 @@ The following folders contain the materials of the workshop:
     [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) |
     [venv](https://docs.python.org/3/library/venv.html) |
     [uv](https://docs.astral.sh/uv/) |
-    etc.
-) to have no conflicts with other packages installed on your system. Activate the environment.
+    etc.) to have no conflicts with other packages installed on your system. Activate the environment.
 
 4. Use the following command to install all prerequisites for the workshop:
 
