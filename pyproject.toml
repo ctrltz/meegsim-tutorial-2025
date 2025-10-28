@@ -14,7 +14,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
   "emoji",
-  "mne[full]",
+  "mne[full]>=1.9.0",
   "meegsim==0.0.2"
 ]
 
