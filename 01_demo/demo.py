@@ -6,7 +6,7 @@ In this tutorial/demo, we will start with the pre-requisites for the simulation
 (source space / forward model), then look into building blocks currently provided
 by MEEGsim and how one can combine them in a simulation.
 
-**NOTE:** this script is designed to run in steps, which are contained in the
+**NOTE:** this script is designed to run in steps, which are represented by the
 functions below. After each step, the program stops. If you're done with exploring
 the output of a certain step, you can go back to the script and skip it by
 setting `complete` to True in the function arguments:
@@ -46,8 +46,8 @@ which are imported below. Here's a short overview of their purpose:
 * `show_waveforms` - plots the provided waveforms in time and frequency domain
 * `show_leadfield` - plots the leadfield of the provided sources
 * `FILL_ME` - placeholder for the places where **your** input is expected. It always
-  raises an error with instructions as an error message. Replace the `FILL_ME` call
-  with your code.
+  raises an error with instructions as an error message. Replace the whole `FILL_ME`
+  call with your code.
 """
 
 
@@ -67,9 +67,14 @@ subjects_dir = Path(download_path).expanduser().absolute() / "MNE-fsaverage-data
 fs_dir = fetch_fsaverage(subjects_dir=subjects_dir)
 
 
+"""
+1. Navigating the source space
+"""
+
+
 def step1_1_create_source_space():
     """
-    1. Navigating the source space
+    1.1. Creating the source space
     ------------------------------
 
     Source space is one of the key ingredients in every simulation, since it defines
@@ -80,13 +85,14 @@ def step1_1_create_source_space():
     are added to the simulation:
       * index of the source space (0 - left hemisphere, 1 - right hemisphere)
       * index of the vertex within the respective hemisphere (`vertno`).
-    """
 
-    # Let's create a source space using the template MPI (`fsaverage`) from the
-    # sample MNE dataset and inspect it first. The `spacing` parameter below defines
-    # how coarse the source space. We recommend using `oct5` throughout the tutorial
-    # to reduce the computational load during the workshop. Find more about other
-    # possible and recommended spacing values [here](https://mne.tools/stable/documentation/cookbook.html#setting-up-the-source-space).
+    Let's create a source space using the template MPI (`fsaverage`) from the
+    sample MNE dataset and inspect it first. The `spacing` parameter below defines
+    how coarse the source space will be. In this tutorial, we recommend using `oct5`
+    to reduce the computational load during the workshop. For real data analysis, more
+    dense grids are generally preferred.  Find more about other possible and recommended
+    spacing values [here](https://mne.tools/stable/documentation/cookbook.html#setting-up-the-source-space).
+    """
     src = mne.setup_source_space(
         subject=subject, spacing="oct5", subjects_dir=subjects_dir, add_dist=False
     )
@@ -95,18 +101,22 @@ def step1_1_create_source_space():
 
 
 def step1_2_inspect_source_space(src, complete=False):
+    """
+    1.2. Inspecting the source space
+    """
     if complete:
         return
 
     # If we print the resulting `src`, we get an overview of the generated source
-    # space: two hemispheres with 1026 vertices in each hemisphere.
-    # Hemisphere-specific data can be accessed with `src[0]` and  `src[1]` for left
-    # and right hemisphere, respectively.
+    # space: two hemispheres with 1026 vertices (see `n_used` in the output below)
+    # in each hemisphere.
     divider(pre=True)
     print("Short description of the source space structure:")
     print(src)
     divider(post=True)
 
+    # Hemisphere-specific data can be accessed with `src[0]` and  `src[1]` for left
+    # and right hemisphere, respectively.
     divider(pre=True)
     print("Description of the source space for left hemisphere:")
     print(src[0])
@@ -123,10 +133,9 @@ def step1_2_inspect_source_space(src, complete=False):
         src=src,
     )
 
-    # Each vertex has a unique number between 0 and 163841. The `vertno` array stored
+    # Each vertex has a unique number between 0 and 163841. The `vertno` array stores
     # indices of all vertices that belong to the source space (in this case, the left
     # hemisphere):
-
     divider(pre=True)
     print("Indices of vertices in the left hemisphere:")
     print(src[0]["vertno"])
@@ -137,7 +146,7 @@ def step1_2_inspect_source_space(src, complete=False):
 
     # In MEEGsim, we use the combination of the hemisphere index (0/1) and `vertno`
     # to define the position of added sources. You can try it out below in a small
-    # example (not yet simulation). The helper function `show_source` will show the
+    # example (not yet simulation). The helper function `show_sources` will show the
     # source that is defined by `hemi_idx` and `vertno` below.
 
     hemi_idx = 0
@@ -160,6 +169,9 @@ def step1_2_inspect_source_space(src, complete=False):
 
 
 def step1_3_select_random(src, complete=False):
+    """
+    1.3. Selecting random vertices in MEEGsim.
+    """
     if complete:
         return
 
@@ -188,7 +200,8 @@ def step1_3_select_random(src, complete=False):
 ----------------
 
 Forward model is the second key ingredient of all simulations. It provides a mapping
-between source- and sensor-space activity, which is described by the lead field matrix. In this section, we explore the lead field.
+between source- and sensor-space activity, which is described by the lead field matrix.
+In this section, we will explore and visualize the lead field.
 """
 
 
@@ -208,6 +221,11 @@ def step2_1_create_chanlocs():
 
 
 def step2_2_inspect_chanlocs(info, complete=False):
+    """
+    2.2. Inspect channel locations
+
+    We plot the channel locations as a sanity check:
+    """
     if complete:
         return
 
@@ -252,7 +270,10 @@ def step2_3_create_forward(info):
 
 def step2_4_inspect_leadfield(fwd, info, complete=False):
     """
-    2.4. Inspect lead field
+    2.4. Inspect the lead field
+
+    Among other fields, the forward model (`fwd`) contains the lead field matrix,
+    which we inspect below:
     """
     if complete:
         return
@@ -291,18 +312,20 @@ noise by processing (e.g., filtering) the signal to obtain the desired propertie
 """
 
 
-def get_times(sfreq=250, duration=60):
+def get_times(sfreq=250, duration=60, complete=False):
     """
     Simulation of activity requires a vector of time points for each generated
     sample (similar to `raw.times` in MNE-Python). Below, we create such vector
-    for 60 s of data with the sampling frequency of 250 Hz:
+    for 60 s of data with the sampling frequency of 250 Hz. The individual time
+    points are therefore 4 ms (0.004 s) apart from each other:
     """
     times = np.arange(sfreq * duration) / sfreq
 
-    divider(pre=True)
-    print("First 10 time points:")
-    print(times[:10])
-    divider(post=True)
+    if not complete:
+        divider(pre=True)
+        print("First 10 time points:")
+        print(times[:10])
+        divider(post=True)
 
     return times
 
@@ -310,6 +333,10 @@ def get_times(sfreq=250, duration=60):
 def step3_1_background_noise(complete=False):
     """
     3.1. Noise: background (1/f) and sensor (white)
+
+    In this section, we show different ways to simulating time series
+    of noise with MEEGsim (1 time series of each kind in the example below).
+    For 1/f noise, it is possible to set `slope` to a desired value:
     """
     if complete:
         return
@@ -333,6 +360,9 @@ def step3_1_background_noise(complete=False):
 def step3_2_oscillatory_activity(complete=False):
     """
     3.2. Oscillatory activity
+
+    Oscillatory activity is simulated by filtering white noise in a frequency
+    band of interest (defined with cutoff frequencies `fmin` and `fmax`):
     """
     if complete:
         return
