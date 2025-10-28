@@ -8,9 +8,9 @@ This repository contains the materials of the workshop on how to use the MEEGsim
 
 ## Schedule
 
-The schedule is tentative and may be adjusted so that the pace is comfortable to the participants.
+The schedule is tentative and may be adjusted to make the pace comfortable for the participants.
 
-* before the workshop: [Prepare for the workshop](#preparing-for-the-workshop) (`00_test_install`)
+* before the workshop: Please [prepare for the workshop](#preparing-for-the-workshop) in advance (`00_test_install`)
 
 * 2:30pm - 2:50pm: Short intro to simulations - why, what, how? [[slides](https://drive.google.com/file/d/1JwOkb5sQiSYHdQd2WqxGxO-CQ7xeuEl1/view?usp=sharing)]
 
