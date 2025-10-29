@@ -155,7 +155,6 @@ def step1_2_inspect_source_space(src, complete=False):
     # TIP: add surf="pial" or surf="pial_semi_inflated" to show sulci/gyri
     show_sources(src, [(hemi_idx, vertno)], subjects_dir)
 
-    # %% [markdown]
     # **EXERCISES**:
     # 1. Try moving the source to the right hemisphere.
     # 2. Try changing the `vertno` value to select a source in frontal/occipital/your
@@ -175,7 +174,6 @@ def step1_3_select_random(src, complete=False):
     if complete:
         return
 
-    # %% [markdown]
     # Sometimes, it can be useful to choose vertices randomly,
     # and the [`select_random`](https://meegsim.readthedocs.io/en/latest/generated/meegsim.location.select_random.html)
     # function can be used for this purpose. Notice the format of its output

@@ -153,11 +153,16 @@ def step1_2_inspect_source_space(src, complete=True):
     # TIP: add surf="pial" or surf="pial_semi_inflated" to show sulci/gyri
     show_sources(src, [(hemi_idx, vertno)], subjects_dir)
 
-    # %% [markdown]
     # **EXERCISES**:
     # 1. Try moving the source to the right hemisphere.
     # 2. Try changing the `vertno` value to select a source in frontal/occipital/your
     # favorite area.
+
+    # **SOLUTIONS**:
+    # 1. Set `hemi_idx` to 1.
+    # 2. This task is meant to be tricky - numbers in the `vertno` array don't really
+    # follow any clear pattern for the spacing we used, so in practice it makes more
+    # sense to pick the vertices based on the location `src[0]['rr]` or other criteria.
 
     input("Press any key to continue")
     print(
@@ -173,7 +178,6 @@ def step1_3_select_random(src, complete=True):
     if complete:
         return
 
-    # %% [markdown]
     # Sometimes, it can be useful to choose vertices randomly,
     # and the [`select_random`](https://meegsim.readthedocs.io/en/latest/generated/meegsim.location.select_random.html)
     # function can be used for this purpose. Notice the format of its output
@@ -499,6 +503,7 @@ def step4_2_inspect_source_configuration(sc, complete=True):
     plt.show(block=True)
 
     # **EXERCISE**: plot the activity of the source `m1-rh`.
+    # **SOLUTION**: change `"m1-lh"` to `"m1-rh"` in the cell above.
 
     input("Press any key to continue")
     print(
