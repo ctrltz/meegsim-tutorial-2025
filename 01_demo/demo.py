@@ -382,19 +382,31 @@ def step3_2_oscillatory_activity(complete=False):
 """
 4. Combining the ingredients
 ----------------------------
+
+By now, we learned how to place sources and generate their activity, but that doesn't
+feel like a proper simulation yet. It's time to combine the introduced ingredients.
+For this purpose, we will use the `SourceSimulator` class provided by MEEGsim, which
+allows one to add sources of activity to the simulation and set their coupling.
 """
 
 
-def step4_1_first_simulation(fwd):
+def step4_1_general_workflow(fwd):
     """
     4.1. First simulation
-    By now, we learned how to place sources and generate their activity, but that
-    doesn't feel like a proper simulation yet. It's time to combine the ingredients.
-    For this purpose, we will use the `SourceSimulator` class provided by MEEGsim,
-    which allows one to add sources (`add_point_sources`, `add_noise_sources`) to the
-    simulation. When adding sources, we need to set their `location` and `waveform`
-    either explicitly (`(hemi_idx, vertno)` and time course) or through a generating
-    function (`select_random`, `one_over_f_noise`):
+    ---------------------
+    The general workflow of simulations with MEEGsim is presented below. There are
+    two main classes:
+
+        * `SourceSimulator` - this class allows you to define the parameters of your
+          simulation (source locations, waveforms, and coupling)
+        * `SourceConfiguration` - this class corresponds to one possible instance of
+          simulation with the parameters you defined. If some of the parameters are
+          chosen randomly, configurations will differ. One `SourceSimulator` can thus
+          be used to produce multiple `SourceConfiguration` objects (i.e., datasets).
+          Source configurations can be converted to common used MNE objects (currently,
+          `raw` or `stc`).
+
+    See also ../assets/general_workflow.png
     """
     # re-using the approach from section 3.2 here
     sfreq = 250
@@ -403,13 +415,25 @@ def step4_1_first_simulation(fwd):
     s1 = narrowband_oscillation(1, times, fmin=8, fmax=12)
     s2 = narrowband_oscillation(1, times, fmin=16, fmax=24)
 
+    # To initialize the `SourceSimulator`, we need to provide the source space that
+    # defines all candidate source locations:
     src = fwd["src"]
     sim = SourceSimulator(src)
+
+    # When adding sources, we need to set their `location` and `waveform` either
+    # explicitly (`(hemi_idx, vertno)` and time course) or through a generating function
+    # (`select_random`, `one_over_f_noise`). Below, we first add two point sources in
+    # motor areas of both hemispheres using the time courses of alpha and beta oscillations
+    # from Section 3.2. For convenience, we can also assign meaningful names to the sources.
+    # This feature comes in handy when defining the connectivity:
     sim.add_point_sources(
         location=[(0, 0), (1, 0)],
         waveform=np.vstack([s1, s2]),
         names=["m1-lh", "m1-rh"],
     )
+
+    # Afterwards, we add 100 noise sources in random locations by providing the names
+    # of the generator functions:
     _ = sim.add_noise_sources(
         location=select_random,
         location_params=dict(n=100),
@@ -432,11 +456,27 @@ def step4_2_inspect_source_configuration(sc, complete=False):
     -----------------------------------------------
 
     To get a better feeling of what we have just achieved, we can inspect the
-    resulting source configuration in more detail. First, let's plot all sources:
+    resulting source configuration in more detail.
     """
     if complete:
         return
 
+    # Each source has a name for quick access, and names can be set when creating the
+    # sources (see the `add_point_sources` call above; it is also helpful when defining
+    # ground-truth connectivity):
+    divider(pre=True)
+    print("Simulated sources")
+    print(sc._sources)
+    divider(post=True)
+
+    # If the names are not provided explicitly, they are (for now, this behavior might
+    # be changed) generated automatically:
+    divider(pre=True)
+    print("Simulated NOISE sources")
+    print(sc._noise_sources)
+    divider(post=True)
+
+    # Now, let's plot all sources
     sc.plot(
         subject="fsaverage",
         subjects_dir=subjects_dir,
@@ -467,7 +507,7 @@ def step4_2_inspect_source_configuration(sc, complete=False):
     exit(0)
 
 
-def step4_3_obtain_data(sc, complete=False):
+def step4_3_obtain_data(sc, fwd, info, complete=False):
     """
     4.3. Obtain data
 
@@ -483,6 +523,13 @@ def step4_3_obtain_data(sc, complete=False):
     print("Resulting stc:")
     print(stc)
     divider(post=True)
+
+    stc.plot(
+        subject="fsaverage",
+        subjects_dir=subjects_dir,
+        hemi="split",
+        views=["lat", "med"],
+    )
 
     # To obtain sensor-space data, we need to provide the forward model (`fwd`)
     # and channel locations (`info`). In addition, we can add a certain level of
@@ -503,7 +550,7 @@ def step4_3_obtain_data(sc, complete=False):
     exit(0)
 
 
-def step4_4_adjust_snr(sim, sfreq=250, duration=60, complete=False):
+def step4_4_adjust_snr(sim, fwd, info, sfreq=250, duration=60, complete=False):
     """
     4.4. Adjusting the signal-to-noise ratio (SNR)
 
@@ -673,6 +720,68 @@ def step5_3_adding_to_simulation(fwd, complete=False):
     exit(0)
 
 
+"""
+6. Summary
+----------
+
+Congrats, you've made it to the end of the demo! Below you can find an overview of
+what we've covered so far. This rather short script generates simulated EEG data for
+100 sources of 1/f activity and 2 sources of alpha activity with pre-defined
+coupling parameters and desired SNR. Comments above function calls highlight the
+similarity between MEEGsim syntax and textual description that one could use in the paper.
+"""
+
+
+def step6_summary(fwd, info):
+    sfreq = 250
+    duration = 60
+
+    src = fwd["src"]
+    sim = SourceSimulator(src)
+
+    # 100 noise sources placed randomly
+    sim.add_noise_sources(location=select_random, location_params=dict(n=100))
+
+    # 2 sources of narrowband (8-12 Hz) oscillation
+    sim.add_point_sources(
+        location=[(0, 0), (1, 0)],
+        waveform=narrowband_oscillation,
+        waveform_params=dict(fmin=8, fmax=12),
+        names=["m1-lh", "m1-rh"],
+    )
+
+    # Coupling between alpha sources with a phase lag of pi/2 and coherence of 0.5
+    sim.set_coupling(
+        ("m1-lh", "m1-rh"),
+        method=ppc_shifted_copy_with_noise,
+        fmin=8,
+        fmax=12,
+        coh=0.5,
+        phase_lag=np.pi / 2,
+    )
+
+    # SNR of 0.5 in 8-30 Hz
+    sc = sim.simulate(
+        sfreq=sfreq,
+        duration=duration,
+        snr_global=0.5,
+        snr_params=dict(fmin=8, fmax=30),
+        fwd=fwd,
+        random_state=123,
+    )
+
+    # 1% of sensor space noise
+    raw = sc.to_raw(fwd, info, sensor_noise_level=0.01)
+
+    return raw
+
+
+"""
+Now it's your turn to simulate! Check out the `02_hands_on` folder
+with some tasks that we prepared.
+"""
+
+
 if __name__ == "__main__":
     src = step1_1_create_source_space()
     step1_2_inspect_source_space(src)
@@ -686,14 +795,16 @@ if __name__ == "__main__":
     step3_1_background_noise()
     step3_2_oscillatory_activity()
 
-    sim, sc = step4_1_first_simulation(fwd)
+    sim, sc = step4_1_general_workflow(fwd)
     step4_2_inspect_source_configuration(sc)
-    step4_3_obtain_data(sc)
-    step4_4_adjust_snr(sim)
+    step4_3_obtain_data(sc, fwd, info)
+    step4_4_adjust_snr(sim, fwd, info)
 
     step5_1_constant_phase_lag()
     step5_2_weak_synchronization()
     step5_3_adding_to_simulation(fwd)
+
+    step6_summary(fwd, info)
 
     print("""
         Congrats, you've made it to the end of the demo!
