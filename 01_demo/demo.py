@@ -809,4 +809,7 @@ if __name__ == "__main__":
     print("""
         Congrats, you've made it to the end of the demo!
         Thank you very much for participating!
+
+        Now it's your turn to simulate! Check out the
+        `02_hands_on` folder with some tasks that we prepared.
     """)
