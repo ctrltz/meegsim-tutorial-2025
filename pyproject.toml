@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "meegsim_tutorial"
-version = "0.2dev"
+version = "1.0dev"
 authors = [
   { name="Nikolai Kapralov", email="kapralov@cbs.mpg.de" },
   { name="Alina Studenova" },
@@ -14,14 +14,12 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
   "emoji",
-  "mne",
-  "meegsim[plot]==0.0.2"
+  "mne[full]>=1.9.0",
+  "meegsim==0.0.2"
 ]
 
 [project.optional-dependencies]
 dev = [
-  "ipykernel",
-  "ipywidgets",
   "pre-commit",
   "ruff"
 ]

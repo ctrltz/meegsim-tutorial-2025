@@ -32,7 +32,7 @@ from meegsim.location import select_random
 from meegsim.waveform import narrowband_oscillation, one_over_f_noise, white_noise
 from meegsim.simulate import SourceSimulator
 
-from meegsim_tutorial.utils import divider, info_from_montage, FILL_ME
+from meegsim_tutorial.utils import divider, info_from_montage
 from meegsim_tutorial.viz import show_sources, show_waveforms, show_leadfield
 
 """
@@ -58,9 +58,7 @@ which are imported below. Here's a short overview of their purpose:
 Below, please provide the same path to the sample dataset that you used
 during the installation check.
 """
-download_path = FILL_ME(
-    "Provide the same value for path as the one you used during the installation check."
-)
+download_path = "~/mne_data"
 
 subject = "fsaverage"
 subjects_dir = Path(download_path).expanduser().absolute() / "MNE-fsaverage-data"
@@ -100,7 +98,7 @@ def step1_1_create_source_space():
     return src
 
 
-def step1_2_inspect_source_space(src, complete=False):
+def step1_2_inspect_source_space(src, complete=True):
     """
     1.2. Inspecting the source space
     """
@@ -160,6 +158,12 @@ def step1_2_inspect_source_space(src, complete=False):
     # 2. Try changing the `vertno` value to select a source in frontal/occipital/your
     # favorite area.
 
+    # **SOLUTIONS**:
+    # 1. Set `hemi_idx` to 1.
+    # 2. This task is meant to be tricky - numbers in the `vertno` array don't really
+    # follow any clear pattern for the spacing we used, so in practice it makes more
+    # sense to pick the vertices based on the location `src[0]['rr]` or other criteria.
+
     input("Press any key to continue")
     print(
         "Step 1.2 is complete, please set complete to True after finishing the exercises"
@@ -167,7 +171,7 @@ def step1_2_inspect_source_space(src, complete=False):
     exit(0)
 
 
-def step1_3_select_random(src, complete=False):
+def step1_3_select_random(src, complete=True):
     """
     1.3. Selecting random vertices in MEEGsim.
     """
@@ -218,7 +222,7 @@ def step2_1_create_chanlocs():
     return info
 
 
-def step2_2_inspect_chanlocs(info, complete=False):
+def step2_2_inspect_chanlocs(info, complete=True):
     """
     2.2. Inspect channel locations
 
@@ -266,7 +270,7 @@ def step2_3_create_forward(info):
     return fwd
 
 
-def step2_4_inspect_leadfield(fwd, info, complete=False):
+def step2_4_inspect_leadfield(fwd, info, complete=True):
     """
     2.4. Inspect the lead field
 
@@ -296,7 +300,9 @@ def step2_4_inspect_leadfield(fwd, info, complete=False):
     # changes.
 
     input("Press any key to continue")
-    print("Step 2.4 is complete, please set complete to True")
+    print(
+        "Step 2.4 is complete, please set complete to True after finishing the exercise"
+    )
     exit(0)
 
 
@@ -310,7 +316,7 @@ noise by processing (e.g., filtering) the signal to obtain the desired propertie
 """
 
 
-def get_times(sfreq=250, duration=60, complete=False):
+def get_times(sfreq=250, duration=60, complete=True):
     """
     Simulation of activity requires a vector of time points for each generated
     sample (similar to `raw.times` in MNE-Python). Below, we create such vector
@@ -328,7 +334,7 @@ def get_times(sfreq=250, duration=60, complete=False):
     return times
 
 
-def step3_1_background_noise(complete=False):
+def step3_1_background_noise(complete=True):
     """
     3.1. Noise: background (1/f) and sensor (white)
 
@@ -355,7 +361,7 @@ def step3_1_background_noise(complete=False):
     exit(0)
 
 
-def step3_2_oscillatory_activity(complete=False):
+def step3_2_oscillatory_activity(complete=True):
     """
     3.2. Oscillatory activity
 
@@ -448,7 +454,7 @@ def step4_1_general_workflow(fwd):
     return sim, sc
 
 
-def step4_2_inspect_source_configuration(sc, complete=False):
+def step4_2_inspect_source_configuration(sc, complete=True):
     """
     4.2. Inspect and debug the source configuration
     -----------------------------------------------
@@ -497,6 +503,7 @@ def step4_2_inspect_source_configuration(sc, complete=False):
     plt.show(block=True)
 
     # **EXERCISE**: plot the activity of the source `m1-rh`.
+    # **SOLUTION**: change `"m1-lh"` to `"m1-rh"` in the cell above.
 
     input("Press any key to continue")
     print(
@@ -505,7 +512,7 @@ def step4_2_inspect_source_configuration(sc, complete=False):
     exit(0)
 
 
-def step4_3_obtain_data(sc, fwd, info, complete=False):
+def step4_3_obtain_data(sc, fwd, info, complete=True):
     """
     4.3. Obtain data
 
@@ -521,13 +528,6 @@ def step4_3_obtain_data(sc, fwd, info, complete=False):
     print("Resulting stc:")
     print(stc)
     divider(post=True)
-
-    stc.plot(
-        subject="fsaverage",
-        subjects_dir=subjects_dir,
-        hemi="split",
-        views=["lat", "med"],
-    )
 
     # To obtain sensor-space data, we need to provide the forward model (`fwd`)
     # and channel locations (`info`). In addition, we can add a certain level of
@@ -548,7 +548,7 @@ def step4_3_obtain_data(sc, fwd, info, complete=False):
     exit(0)
 
 
-def step4_4_adjust_snr(sim, fwd, info, sfreq=250, duration=60, complete=False):
+def step4_4_adjust_snr(sim, fwd, info, sfreq=250, duration=60, complete=True):
     """
     4.4. Adjusting the signal-to-noise ratio (SNR)
 
@@ -597,7 +597,7 @@ lag and coupling strength).
 """
 
 
-def step5_1_constant_phase_lag(complete=False):
+def step5_1_constant_phase_lag(complete=True):
     """
     5.1. Constant phase lag
 
@@ -629,7 +629,7 @@ def step5_1_constant_phase_lag(complete=False):
     exit(0)
 
 
-def step5_2_weak_synchronization(complete=False):
+def step5_2_weak_synchronization(complete=True):
     """
     5.2. Weak synchronization
 
@@ -663,7 +663,7 @@ def step5_2_weak_synchronization(complete=False):
     exit(0)
 
 
-def step5_3_adding_to_simulation(fwd, complete=False):
+def step5_3_adding_to_simulation(fwd, complete=True):
     """
     5.3. Add connectivity to the simulation
     ---------------------------------------
@@ -774,12 +774,6 @@ def step6_summary(fwd, info):
     raw = sc.to_raw(fwd, info, sensor_noise_level=0.01)
 
     return raw
-
-
-"""
-Now it's your turn to simulate! Check out the `02_hands_on` folder
-with some tasks that we prepared.
-"""
 
 
 if __name__ == "__main__":

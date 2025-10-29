@@ -1,6 +1,22 @@
 # Intro to MEEGsim
 
-This repository contains the materials of the workshop on how to use the MEEGsim package for simulating ground-truth M/EEG activity and connectivity patterns.
+This repository contains the materials of the workshop on how to use the MEEGsim package for simulating ground-truth M/EEG activity and connectivity patterns. The workshop will be hosted as part of the [Toolbox Bouquet](https://cuttingeeg.org/practicalmeeg2025/bouquet/) session (30.10.2025, 2-5 pm CET) at the [PracticalMEEG'25](https://cuttingeeg.org/practicalmeeg2025/) conference.
+
+## Authors
+
+[Nikolai Kapralov](https://bsky.app/profile/willenjoy.bsky.social) and [Alina Studenova](https://bsky.app/profile/studenova.bsky.social), Max Planck Institute for Human Cognitive and Brain Sciences, Leipzig, Germany
+
+## Schedule
+
+The schedule is tentative and may be adjusted to make the pace comfortable for the participants.
+
+* before the workshop: Please [prepare for the workshop](#preparing-for-the-workshop) in advance (`00_test_install`)
+
+* 2:30pm - 2:50pm: Short intro to simulations - why, what, how? [[slides](https://drive.google.com/file/d/1JwOkb5sQiSYHdQd2WqxGxO-CQ7xeuEl1/view?usp=sharing)]
+
+* 2:50pm - 4:00pm: Going together through the demo script / Jupyter notebook (`01_demo`) to learn about the features MEEGsim provides
+
+* 4:00pm - 5:00pm: Hands-on part (`02_hands_on`) - use MEEGsim to illustrate neurophysiological- / signal-processing-related phenomena with simulations
 
 ## Folder structure
 
@@ -8,8 +24,11 @@ The following folders contain the materials of the workshop:
 
 * `00_test_install`: small notebook/script for testing that all packages were installed properly when [preparing for the workshop](#preparing-for-the-workshop)
 * `01_demo`: notebook/script that will be discussed during the demo part of the workshop
-* `02_hands_on`: notebooks/scripts with exercises for the hands-on part of the workshop (**WIP**):
+* `02_hands_on`: notebooks/scripts with exercises for the hands-on part of the workshop:
+    * `noise_bursts`: show that threshold-based methods detect oscillatory bursts even if the brain only shows 1/f-activity
     * `patch_cancellation`: investigate and visualize how the leadfield of a patch source changes depending on its area
+    * `snr_connectivity`: show that the estimated connectivity may depend on the signal-to-noise ratio of the oscillatory activity
+    * `std_alpha`: learn how to make simulations more realistic using variance of source activity derived from real data
 * `_solutions`: suggested solutions for the `FILL_ME` parts of the scripts (sometimes, just one of the many possible options)
 * `src/meegsim_tutorial`: helper functions that are used in the notebooks/scripts (feel free to check their code if you want to understand them better but this should not be necessary to follow)
 
