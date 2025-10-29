@@ -540,9 +540,9 @@ def step4_3_obtain_data(sc, fwd, info, complete=False):
 
     # Let's inspect the simulated data and its spectra:
     raw.plot(scalings=dict(eeg=2e-6))
-    _ = raw.compute_psd(fmax=40, n_fft=2 * sc.sfreq, n_overlap=sc.sfreq).plot(
-        sphere="eeglab"
-    )
+    psd = raw.compute_psd(fmax=40, n_fft=2 * sc.sfreq, n_overlap=sc.sfreq)
+    psd.plot(sphere="eeglab")
+    psd.plot_topomap(sphere="eeglab")
     plt.show(block=True)
 
     input("Press any key to continue")
@@ -574,7 +574,9 @@ def step4_4_adjust_snr(sim, fwd, info, sfreq=250, duration=60, complete=False):
     raw = sc.to_raw(fwd, info, sensor_noise_level=0.01)
 
     # Inspect the resulting spectra
-    _ = raw.compute_psd(fmax=40, n_fft=2 * sfreq, n_overlap=sfreq).plot(sphere="eeglab")
+    psd = raw.compute_psd(fmax=40, n_fft=2 * sc.sfreq, n_overlap=sc.sfreq)
+    psd.plot(sphere="eeglab")
+    psd.plot_topomap(sphere="eeglab")
 
     # **EXERCISE**: try other values of `snr_global` to get the spectra which look
     # reasonable (e.g., realistic or just cool) to you.
